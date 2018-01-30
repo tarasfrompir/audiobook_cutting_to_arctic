@@ -6,3 +6,5 @@
 остальное прога делает
 
 а потом долгая корректировка
+
+Для этой хрени https://github.com/marytts/marytts/wiki/VoiceImportToolsTutorial
