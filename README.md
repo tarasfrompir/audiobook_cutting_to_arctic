@@ -1,6 +1,8 @@
 # audiobook_cutting_to_arctic
 голос какой нравиться берем отсюда http://abooks.zone/audiobooks/otherbooks/marko-vovchok-na-ukrainskom-yazyke-institutka.html
 
+http://abooks.zone/voice/svetlana-dmitrenko
+
 нарезку проводим прогой mp3DirectCut
 
 остальное прога делает
