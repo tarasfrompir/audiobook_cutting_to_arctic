@@ -10,3 +10,5 @@ http://abooks.zone/voice/svetlana-dmitrenko
 а потом долгая корректировка
 
 Для этой хрени https://github.com/marytts/marytts/wiki/VoiceImportToolsTutorial
+
+Удалять все файли вав размером от 0 до 280 кб и от 1,3 мб и выше
