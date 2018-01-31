@@ -3,7 +3,7 @@
 
 http://abooks.zone/voice/svetlana-dmitrenko
 
-нарезку проводим прогой mp3DirectCut
+нарезку проводим прогой mp3DirectCut вер 2.23 не ниже
 
 остальное прога делает
 
