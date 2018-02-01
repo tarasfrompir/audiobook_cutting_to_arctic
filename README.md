@@ -12,3 +12,10 @@ http://abooks.zone/voice/svetlana-dmitrenko
 Для этой хрени https://github.com/marytts/marytts/wiki/VoiceImportToolsTutorial
 
 Удалять все файли вав размером от 0 до 280 кб и от 1 мб и выше
+
+SLOVARI
+файлы можно взять из офисных пакетов openoffice и libreoffice
+называются они
+ru_RU.dic
+ru_RU.aff
+их нужно скопировать в папку c:/Python27/Lib/site-packages/enchant/share/enchant/myspell
