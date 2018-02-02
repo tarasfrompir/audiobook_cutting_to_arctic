@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 
 #Подключаем модуль 
 import os
@@ -10,11 +10,12 @@ directory = './sound/narezka'
 
 # udalyaem vse predidushie fayli
 shutil.rmtree('./sound/wav', ignore_errors=True)
+# создаем директорию если она отсутствует
+if not os.path.exists('./sound/wav'):
+    os.makedirs('./sound/wav')
 
 #Получаем список файлов в переменную files 
 files = os.listdir(directory)
-
-
 # dlyaskritiya processa
 CREATE_NO_WINDOW = 0x08000000
 
