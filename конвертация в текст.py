@@ -1,6 +1,10 @@
 ﻿#!/usr/bin/env python3
 
+
 import shutil # Подключаем модуль
+
+# recognize speech using Wit.ai
+WIT_AI_KEY = "FGDIOCBONK7QLHMPQHQLOUNS37V6BLMK"  # Wit.ai keys are 32-character uppercase alphan
 
 #Подключаем модуль 
 import os 
@@ -13,12 +17,49 @@ directory = './sound/wav'
 #Получаем список файлов в переменную files 
 files = os.listdir(directory)
 
+# kuda pishem raspoznaniy text
 arctictxt = open('./sound/myvoice/etc/txt.done.data', 'w')
 
-name = 0
+# читаем текст книги
+book = open('./textoffbook/book.txt', 'r')
+textbook = book.read()
+
+# nomer vihodnogo fayla
 outnomer = 0
+
+# поиск строки в тексте книги
+def distance_2(text, pattern):
+   "Calculates the Levenshtein distance between text and pattern."
+   text_len, pattern_len = len(text), len(pattern)
+
+   current_column = range(pattern_len+1)
+   min_value = pattern_len
+   end_pos = 0
+   for i in range(1, text_len+1):
+      previous_column, current_column = current_column, [0]*(pattern_len+1) # !!!
+      for j in range(1,pattern_len+1):
+         add, delete, change = previous_column[j]+1, current_column[j-1]+1, previous_column[j-1]
+         if pattern[j-1] != text[i-1]:
+            change += 1
+         current_column[j] = min(add, delete, change)
+
+      if min_value > current_column[pattern_len]: # !!!
+         min_value = current_column[pattern_len]
+         end_pos = i
+
+   return min_value, end_pos
+
+def distance_3(text, pattern):
+   min_value, end_pos = distance_2(text, pattern)
+   min_value, start_pos = distance_2(text[end_pos-1::-1], pattern[::-1])
+   start_pos = end_pos - start_pos
+   return min_value, start_pos, end_pos, text[start_pos:end_pos], pattern
+
+# konec funkciy
+
+
+# telo cikla
 for file in files:
-    name +=1
     # obtain path to "english.wav" in the same folder as this script
     from os import path
     AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), './sound/wav/'+file)
@@ -29,38 +70,36 @@ for file in files:
         audio = r.record(source)  # read the entire audio file
 
 
-    # recognize speech using Google Speech Recognition
     try:
-        # for testing purposes, we're just using the default API key
-        # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-        # instead of `r.recognize_google(audio)`
-        answer = r.recognize_google(audio, key="AIzaSyCWzMmYVbQVVP6OKrUkSJicGXtIwFZe544", language="uk-UA")
-        #print("GSR.co thinks you said " + answer)
-    except sr.UnknownValueError:
-        print("Google Speech Recognition could not understand audio")
-    except sr.RequestError as e:
-        print("Could not request results from Google Speech Recognition service; {0}".format(e))
-
-    # recognize speech using Wit.ai
-    WIT_AI_KEY = "FGDIOCBONK7QLHMPQHQLOUNS37V6BLMK"  # Wit.ai keys are 32-character uppercase alphanumeric strings
-    try:
+       # poluchaem otvet
         answerwit = r.recognize_wit(audio, key=WIT_AI_KEY)
-        #print("Wit.ai thinks you said " + answerwit)
     except sr.UnknownValueError:
         print("Wit.ai could not understand audio")
+        answerwit = ""
     except sr.RequestError as e:
         print("Could not request results from Wit.ai service; {0}".format(e))
+        answerwit =""
 
-    # pechataem nomer fayla
-    print(format(name)+' '+file)
-    if answer==answerwit:
+    if answerwit != "":
+        # poluchaem distanciyu levenshtayna
+        mv, stpos, endpos, text, pattern= distance_3(u''+textbook, u''+answerwit) # 3 3 8 умент рудимент
+        # sohranenie tekcta i fayla
+        #print(format(name)+' '+file)
+        print (text)
+        start = (textbook.rfind(" ", 0, stpos))+1
+        if start == -1:
+            start = textbook.rfind("\r", 0, stpos)
+        end = textbook.find(" ", endpos)
+        if end == -1:
+            end = textbook.find("\r", 0, endpos)
+        textout= textbook[start:end]
         shutil.copy(r''+'./sound/wav/'+file, r''+'./sound/myvoice/wav/arctic_'+str(outnomer)+'.wav')
-        arctictxt.write('( arctic_'+str(outnomer)+' "'+answer+'" )'+ '\n')
-        print ('( arctic_'+str(outnomer)+' "'+answer+'" )'+ '\n')
+        arctictxt.write('( arctic_'+str(outnomer)+' "'+textout+'" )'+ '\n')
+        print ('( arctic_'+str(outnomer)+' "'+textout+'" )'+ '\n')
         outnomer += 1
+        
 
-
-
+# zakrivaem fail    
 arctictxt.close()
 
 
