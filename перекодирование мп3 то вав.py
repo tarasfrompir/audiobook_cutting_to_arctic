@@ -1,15 +1,19 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 
 #Подключаем модуль 
 import os
-
 import subprocess
+import shutil
 
-#Каталог из которого будем брать изображения 
+#Каталог из которого будем брать fayli 
 directory = './sound/narezka'
+
+# udalyaem vse predidushie fayli
+shutil.rmtree('./sound/wav', ignore_errors=True)
 
 #Получаем список файлов в переменную files 
 files = os.listdir(directory)
+
 
 # dlyaskritiya processa
 CREATE_NO_WINDOW = 0x08000000
