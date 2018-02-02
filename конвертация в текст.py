@@ -108,6 +108,7 @@ for file in files:
         shutil.copy(r''+'./sound/wav/'+file, r''+'./myvoice/wav/arctic_'+str(outnomer)+'.wav')
         arctictxt.write('( arctic_'+str(outnomer)+' "'+textout+'" )'+ '\n')
         print ('( arctic_'+str(outnomer)+' "'+textout+'" )'+ '\n')
+        textbook = textbook.replace(textout," ")
         outnomer += 1
         
 
