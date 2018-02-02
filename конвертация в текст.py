@@ -17,8 +17,24 @@ directory = './sound/wav'
 #Получаем список файлов в переменную files 
 files = os.listdir(directory)
 
+# rabota c papkoy wav v svoy golos
+# udalyaem vse predidushie fayli в своем голосе для избежания проблем
+shutil.rmtree('./myvoice/wav', ignore_errors=True)
+
+# создаем директорию если она отсутствует
+if not os.path.exists('./myvoice/wav'):
+    os.makedirs('./myvoice/wav')
+    
+# rabota c papkoy etc v svoy golos
+# udalyaem vse predidushie fayli в своем голосе для избежания проблем
+shutil.rmtree('./myvoice/etc', ignore_errors=True)
+# создаем директорию если она отсутствует
+if not os.path.exists('./myvoice/etc'):
+    os.makedirs('./myvoice/etc')
 # kuda pishem raspoznaniy text
-arctictxt = open('./sound/myvoice/etc/txt.done.data', 'w')
+arctictxt = open('./myvoice/etc/txt.done.data', 'w')
+
+
 
 # читаем текст книги
 book = open('./textoffbook/book.txt', 'r')
@@ -26,9 +42,6 @@ textbook = book.read()
 
 # nomer vihodnogo fayla
 outnomer = 0
-
-# udalyaem vse predidushie fayli в своем голосе для избежания проблем
-shutil.rmtree('./sound/myvoice/wav', ignore_errors=True)
 
 # поиск строки в тексте книги
 def distance_2(text, pattern):
@@ -90,8 +103,9 @@ for file in files:
         #print(format(name)+' '+file)
         print (text)
         start = (textbook.rfind(" ", 0, stpos))+1
+        end = (textbook.find(" ", endpos))
         textout= textbook[start:end]
-        shutil.copy(r''+'./sound/wav/'+file, r''+'./sound/myvoice/wav/arctic_'+str(outnomer)+'.wav')
+        shutil.copy(r''+'./sound/wav/'+file, r''+'./myvoice/wav/arctic_'+str(outnomer)+'.wav')
         arctictxt.write('( arctic_'+str(outnomer)+' "'+textout+'" )'+ '\n')
         print ('( arctic_'+str(outnomer)+' "'+textout+'" )'+ '\n')
         outnomer += 1
