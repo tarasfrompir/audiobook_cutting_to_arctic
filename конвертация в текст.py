@@ -27,6 +27,9 @@ textbook = book.read()
 # nomer vihodnogo fayla
 outnomer = 0
 
+# udalyaem vse predidushie fayli в своем голосе для избежания проблем
+shutil.rmtree('./sound/myvoice/wav', ignore_errors=True)
+
 # поиск строки в тексте книги
 def distance_2(text, pattern):
    "Calculates the Levenshtein distance between text and pattern."
