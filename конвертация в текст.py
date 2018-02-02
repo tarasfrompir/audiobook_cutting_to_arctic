@@ -87,11 +87,6 @@ for file in files:
         #print(format(name)+' '+file)
         print (text)
         start = (textbook.rfind(" ", 0, stpos))+1
-        if start == -1:
-            start = textbook.rfind("\r", 0, stpos)
-        end = textbook.find(" ", endpos)
-        if end == -1:
-            end = textbook.find("\r", 0, endpos)
         textout= textbook[start:end]
         shutil.copy(r''+'./sound/wav/'+file, r''+'./sound/myvoice/wav/arctic_'+str(outnomer)+'.wav')
         arctictxt.write('( arctic_'+str(outnomer)+' "'+textout+'" )'+ '\n')
