@@ -45,7 +45,7 @@ outnomer = 0
 
 # поиск строки в тексте книги
 def distance_2(text, pattern):
-   "Calculates the Levenshtein distance between text and pattern.
+   "Calculates the Levenshtein distance between text and pattern
     text_len, pattern_len = len(text), len(pattern)
     if text_len>1000:
         text_len = 1000
