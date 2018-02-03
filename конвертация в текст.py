@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/env python3
 
-
+from os import path
 import shutil # Подключаем модуль
 
 # recognize speech using Wit.ai
@@ -16,6 +16,15 @@ directory = './sound/wav'
 
 #Получаем список файлов в переменную files 
 files = os.listdir(directory)
+
+
+
+
+# Sort file names with path
+file_list = os.listdir(directory)
+full_list = [os.path.join(directory, i) for i in file_list]
+files = sorted(full_list, key = os.path.getmtime)
+
 
 # rabota c papkoy wav v svoy golos
 # udalyaem vse predidushie fayli в своем голосе для избежания проблем
@@ -45,9 +54,9 @@ outnomer = 0
 
 # поиск строки в тексте книги
 def distance_2(text, pattern):
-   "Calculates the Levenshtein distance between text and 
-    text_len, pattern_len = len(text), len(pattern)
-    if text_len>300:
+   "Calculates the Levenshtein distance between text and pattern."
+   text_len, pattern_len = len(text), len(pattern)
+   if text_len > 300:
         text_len = 300
 
    current_column = range(pattern_len+1)
@@ -79,8 +88,8 @@ def distance_3(text, pattern):
 # telo cikla
 for file in files:
     # obtain path to "english.wav" in the same folder as this script
-    from os import path
-    AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), './sound/wav/'+file)
+   
+    AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), file)
 
     # use the audio file as the audio source
     r = sr.Recognizer()
@@ -97,7 +106,7 @@ for file in files:
     except sr.RequestError as e:
         print("Could not request results from Wit.ai service; {0}".format(e))
         answerwit =""
-
+    print (file)
     if answerwit != "":
         # poluchaem distanciyu levenshtayna
         mv, stpos, endpos, text, pattern= distance_3(u''+textbook, u''+answerwit) # 3 3 8 умент рудимент
@@ -107,7 +116,7 @@ for file in files:
         start = (textbook.rfind(" ", 0, stpos))+1
         end = (textbook.find(" ", endpos))
         textout= textbook[start:end]
-        shutil.copy(r''+'./sound/wav/'+file, r''+'./myvoice/wav/arctic_'+str(outnomer)+'.wav')
+        shutil.copy(r''+file, r''+'./myvoice/wav/arctic_'+str(outnomer)+'.wav')
         arctictxt.write('( arctic_'+str(outnomer)+' "'+textout+'" )'+ '\n')
         print ('( arctic_'+str(outnomer)+' "'+textout+'" )'+ '\n')
         textbook = textbook.replace(textout," ")
