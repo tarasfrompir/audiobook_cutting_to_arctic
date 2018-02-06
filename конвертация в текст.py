@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 
 from os import path
 import shutil # Подключаем модуль
@@ -56,8 +56,8 @@ outnomer = 0
 def distance_2(text, pattern):
    "Calculates the Levenshtein distance between text and pattern."
    text_len, pattern_len = len(text), len(pattern)
-   if text_len > 300:
-        text_len = 300
+   if text_len > 500:
+        text_len = 500
 
    current_column = range(pattern_len+1)
    min_value = pattern_len
@@ -88,9 +88,8 @@ def distance_3(text, pattern):
 # telo cikla
 for file in files:
     # obtain path to "english.wav" in the same folder as this script
-   
     AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), file)
-
+    print (file)
     # use the audio file as the audio source
     r = sr.Recognizer()
     with sr.AudioFile(AUDIO_FILE) as source:
@@ -99,32 +98,36 @@ for file in files:
 
     try:
        # poluchaem otvet
+        textout=""
         answerwit = r.recognize_wit(audio, key=WIT_AI_KEY)
+        # poluchaem distanciyu levenshtayna
+        mv, stpos, endpos, text, pattern= distance_3(u''+textbook, u''+answerwit) 
+        # sohranenie tekcta i fayla
+        start = (textbook.rfind(" ", 0, stpos))+1
+        end = (textbook.find(" ", endpos))
+        textout= textbook[start:end]
+        print (answerwit)
+        print (textout)
+        # obrezaem knigu
+        # cshivaem text
+        # esli start s bolyshoy bukvy
+        if textout[0:1].istitle():
+            # esli konec na tochku to pishem text i fayl
+            if textout[len(textout)-1:len(textout)]=="." or textout[len(textout)-1:len(textout)]=="?" or textout[len(textout)-1:len(textout)]=="!":
+                # копирование файлов
+                shutil.copy(r''+file, r''+'./myvoice/wav/arctic_'+str(outnomer)+'.wav')
+                arctictxt.write('( arctic_'+str(outnomer)+' "'+textout+'" )'+ '\n')
+                print ('( arctic_'+str(outnomer)+' "'+textout+'" )'+ '\n')
+                textbook = textbook[end:len(textbook)]
+                outnomer += 1
     except sr.UnknownValueError:
         print("Wit.ai could not understand audio")
         answerwit = ""
     except sr.RequestError as e:
         print("Could not request results from Wit.ai service; {0}".format(e))
         answerwit =""
-    print (file)
-    if answerwit != "":
-        # poluchaem distanciyu levenshtayna
-        mv, stpos, endpos, text, pattern= distance_3(u''+textbook, u''+answerwit) # 3 3 8 умент рудимент
-        # sohranenie tekcta i fayla
-        #print(format(name)+' '+file)
-        print (text)
-        start = (textbook.rfind(" ", 0, stpos))+1
-        end = (textbook.find(" ", endpos))
-        textout= textbook[start:end]
-        shutil.copy(r''+file, r''+'./myvoice/wav/arctic_'+str(outnomer)+'.wav')
-        arctictxt.write('( arctic_'+str(outnomer)+' "'+textout+'" )'+ '\n')
-        print ('( arctic_'+str(outnomer)+' "'+textout+'" )'+ '\n')
-        textbook = textbook.replace(textout," ")
-        outnomer += 1
-        
+
+                
 
 # zakrivaem fail    
 arctictxt.close()
-
-
-
